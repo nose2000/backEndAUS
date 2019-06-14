@@ -32,17 +32,53 @@ app.get('/', (req, res, next) => {
                     });
                 }
 
-                Modalidad.countDocuments({}, (err, conteo) => {
+                Proceso.countDocuments({}, (err, conteo) => {
 
                     res.status(200).json({
                         ok: true,
-                        procesos: procesos
+                        procesos,
+                        total: conteo
                     });
 
                 });
             });
 });
 
+
+//===========================================================================
+//                 OBTENER UN PROCESO
+//===========================================================================
+
+app.get('/:id', (req, res) => {
+
+    var id = req.params.id;
+
+    Proceso.findById(id, (err, proceso) => {
+
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'error al buscar proceso',
+                errors: err
+            });
+        }
+
+        if (!proceso) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'el proceso con el id' + id + 'no existe',
+                errors: { message: 'no existe un proceso con ese id' }
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            proceso: proceso
+        });
+
+    });
+
+});
 
 
 //===========================================================================

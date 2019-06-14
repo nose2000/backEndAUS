@@ -36,12 +36,51 @@ app.get('/', (req, res, next) => {
 
                     res.status(200).json({
                         ok: true,
-                        modalidades: modalidades
+                        modalidades,
+                        total: conteo
                     });
 
                 });
             });
 });
+
+
+
+//===========================================================================
+//                 OBTENER UNA MODALIDAD
+//===========================================================================
+
+app.get('/:id', (req, res) => {
+
+    var id = req.params.id;
+
+    Modalidad.findById(id, (err, modalidad) => {
+
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'error al buscar modalidad',
+                errors: err
+            });
+        }
+
+        if (!modalidad) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'la modalidad con el id' + id + 'no existe',
+                errors: { message: 'no existe una modalidad con ese id' }
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            modalidad: modalidad
+        });
+
+    });
+
+});
+
 
 
 

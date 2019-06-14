@@ -36,13 +36,53 @@ app.get('/', (req, res, next) => {
 
                     res.status(200).json({
                         ok: true,
-                        carreras: carreras
+                        carreras,
+                        total: conteo
                     });
 
                 });
 
             });
 });
+
+
+
+//===========================================================================
+//                 OBTENER UNA CARRERA
+//===========================================================================
+
+app.get('/:id', (req, res) => {
+
+    var id = req.params.id;
+
+    Carrera.findById(id, (err, carrera) => {
+
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'error al buscar carrera',
+                errors: err
+            });
+        }
+
+        if (!carrera) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'la carrera con el id' + id + 'no existe',
+                errors: { message: 'no existe una carrera con ese id' }
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            carrera: carrera
+        });
+
+    });
+
+});
+
+
 
 
 
